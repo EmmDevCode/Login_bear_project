@@ -11,6 +11,13 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
+
+  StateMachineController? controller; 
+  SMIBool? isChecking;
+  SMIBool? isHandsUp;
+  SMIBool? trigSuccess; 
+  SMIBool? trigFail;
+
   @override
   Widget build(BuildContext context) {
 
@@ -25,12 +32,34 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
               width: size.width,
               height: 200,
-              child: RiveAnimation.asset('assets/animated_login_character.riv'),
+              child: RiveAnimation.asset('assets/animated_login_character.riv',
+              stateMachines: ["Login Machine"],
+              onInit: (artboard){
+                controller = StateMachineController.fromArtboard(
+                  artboard, 
+                  "Login Machine",
+                );
+                 if(controller == null) return;
+                  artboard.addController(controller!);
+
+                  isChecking  = controller!.findSMI('isChecking');
+                  isHandsUp   = controller!.findSMI('isHandsUp');
+                      trigSuccess = controller!.findSMI('trigSuccess');
+                      trigFail    = controller!.findSMI('trigFail');
+                       },
+              ),
             ), 
             //Espacio entre el oso y el texto email
             const SizedBox(height: 10),
             //campo de texto del email
             TextField(
+              onChanged: (value){
+                if(isHandsUp != null){
+                  isHandsUp!.change(false);
+                  }
+                if(isChecking == null) return;
+                 isChecking!.change(true);
+              },
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 hintText: "Email",
@@ -44,6 +73,13 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 10),
             //campo de texto para password
             TextField(
+              onChanged: (value) {
+                if(isHandsUp != null){  
+                    isHandsUp!.change(true);
+                  }
+                  if(isChecking == null) return;
+                  isChecking!.change(false);
+              },
               obscureText: _obscurePassword,
               decoration: InputDecoration(
                 hintText: "Password",
@@ -56,6 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                       setState(() {
                         _obscurePassword = !_obscurePassword;
+                        isHandsUp!.change(false);
                       });
                     },
                   ),
@@ -63,6 +100,47 @@ class _LoginScreenState extends State<LoginScreen> {
                     //esquina redondeadas
                     borderRadius: BorderRadius.circular(12),
                   )
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: size.width,
+                child: const Text("Forgot Password?",
+                textAlign: TextAlign.right,
+                style: TextStyle(decoration: TextDecoration.underline),
+                ),
+              ),
+              const SizedBox(height: 10),
+               MaterialButton(
+                minWidth:size.width,
+                height: 50,
+                color: Colors.purple,
+                shape:RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                ),
+                onPressed: () {},
+                child: Text("Login",
+                style: TextStyle(
+                  color: Colors.white)),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have an account?"),
+                    TextButton(
+                      onPressed: () {},
+                       child: const Text("Sign Up",
+                       style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline
+                        ),
+                       ),
+                    ),
+            ],
                 ),
               ),
             ],
