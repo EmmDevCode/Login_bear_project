@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
+//3.1 libreria para timer
+import 'dart:async';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,9 +19,13 @@ class _LoginScreenState extends State<LoginScreen> {
   SMIBool? isHandsUp;
   SMIBool? trigSuccess; 
   SMIBool? trigFail;
+  SMINumber? numLook; //2.1 variable para el recorrido de la memoria
 
   final emailFocus = FocusNode();
   final passFocus = FocusNode();
+
+  //3.3 Timer para detener la mirada al dejar de teclear
+  Timer? _typingDebounce;
 
   // 2) Listeners (Oyentes/Chismosito)
   @override
@@ -31,6 +37,13 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         if (emailFocus.hasFocus) {
           isHandsUp?.change(false);
+          //2.2  mirada neutral al escribir al enfocar email
+          numLook?.value = 50.0;
+
+         
+              
+          isHandsUp?.change(false);
+          
           isChecking?.change(true); // Activa la animación "checking" al enfocarse
         } else {
           isChecking?.change(false); // Desactiva al perder el foco
@@ -49,15 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  // 3) Dispose (Limpieza para evitar pérdidas de memoria)
-  @override
-  void dispose() {
-    // Es crucial liberar los recursos de FocusNode y Rive Controller
-    emailFocus.dispose();
-    passFocus.dispose();
-    controller?.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +91,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       isHandsUp = controller!.findSMI<SMIBool>('isHandsUp');
                       trigSuccess = controller!.findSMI<SMIBool>('trigSuccess');
                       trigFail = controller!.findSMI<SMIBool>('trigFail');
-                       },
+                      //2.3 enlazar variable con la animacion
+                      numLook = controller!.findSMI('numLook');
+                       },//clamp
               ),
             ), 
             //Espacio entre el oso y el texto email
@@ -98,7 +104,24 @@ class _LoginScreenState extends State<LoginScreen> {
               onChanged: (value){
                 isChecking?.change(value.isNotEmpty);
                 isHandsUp?.change(false);
+                //ajustes de limite de 0 a 100
+                //80 es una medida de calibracion
+                final look = (value.length/ 120.0 * 100.0).clamp(
+                  0.0, 
+                  100.0
+                  );
+                  numLook?.value = look;
+                  //3.3 Debounnce: si vuelve a teclear, reinicia el contador
+                  _typingDebounce?.cancel(); //cancela cualquier timer existente
+                  _typingDebounce = Timer(const Duration(seconds: 3), (){
+                    if (!mounted) return;
+                  //mirada neutra
+                    isChecking?.change(false);
+                  }
+                  );
+ //si la pantalla se cierra
               },
+          
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 hintText: "Email",
@@ -190,4 +213,16 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  // 3) Dispose (Limpieza para evitar pérdidas de memoria)
+  @override
+  void dispose() {
+    // Es crucial liberar los recursos de FocusNode y Rive Controller
+    emailFocus.dispose();
+    passFocus.dispose();
+    controller?.dispose();
+    super.dispose();
+    _typingDebounce?.cancel();
+  }
 }
+
