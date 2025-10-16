@@ -17,15 +17,73 @@ class _LoginScreenState extends State<LoginScreen> {
   StateMachineController? controller; 
   SMIBool? isChecking;
   SMIBool? isHandsUp;
-  SMIBool? trigSuccess; 
-  SMIBool? trigFail;
+  SMITrigger? trigSuccess; 
+  SMITrigger? trigFail;
   SMINumber? numLook; //2.1 variable para el recorrido de la memoria
 
   final emailFocus = FocusNode();
   final passFocus = FocusNode();
 
-  //3.3 Timer para detener la mirada al dejar de teclear
+  // 3.2 Timer para detener la mirada al dejar de teclear
   Timer? _typingDebounce;
+
+  // 4.1 Controllers
+  final emailCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
+
+  // 4.2 Errores para mostrar en el UI
+  String? emailError;
+  String? passError;
+
+  //4.3 Validadores
+  bool isValidEmail(String email) {
+    final re = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
+    return re.hasMatch(email);
+  }
+
+  bool isValidPassword(String pass) {
+    // mínimo 8, una mayúscula, una minúscula, un dígito y un especial
+    final re = RegExp(
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$',
+    );
+    return re.hasMatch(pass);
+  }
+
+  // 4.4 accion al boton 
+  void _onLogin(){
+    final email = emailCtrl.text.trim();
+    final pass = passCtrl.text;
+
+   // Recalcular errores
+
+   final eError = isValidEmail(email) ? null : 'Email Invalido';
+   final pError = isValidPassword(pass) ? null :
+   'Minimo 8 Caracteres, 1 mayuscula, 1 minuscula, 1 numero y 1 caracter especial';
+  
+  //para que se muestre en la UI
+  setState(() {
+    emailError = eError;
+    passError = pError;
+  });
+
+   //4.5 cerrar el teclado y bajar
+   FocusScope.of(context).unfocus();
+   _typingDebounce?.cancel();
+   isChecking?.change(false);
+   isHandsUp?.change(false);
+   numLook?.value = 50.0; 
+
+
+   //4.7 Acitvar triggers
+   if (eError == null && pError == null){
+    trigSuccess?.fire();
+   } else{
+   trigFail?.fire();
+   }
+  }
+
+ 
+
 
   // 2) Listeners (Oyentes/Chismosito)
   @override
@@ -89,8 +147,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   isChecking = controller!.findSMI<SMIBool>('isChecking');
                       isHandsUp = controller!.findSMI<SMIBool>('isHandsUp');
-                      trigSuccess = controller!.findSMI<SMIBool>('trigSuccess');
-                      trigFail = controller!.findSMI<SMIBool>('trigFail');
+                      trigSuccess = controller!.findSMI('trigSuccess');
+                      trigFail = controller!.findSMI('trigFail');
                       //2.3 enlazar variable con la animacion
                       numLook = controller!.findSMI('numLook');
                        },//clamp
@@ -101,6 +159,8 @@ class _LoginScreenState extends State<LoginScreen> {
             //campo de texto del email 
             TextField(
                focusNode: emailFocus, // Asignación de FocusNode
+               //4.8 enlazar controller al textfield
+               controller: emailCtrl,
               onChanged: (value){
                 isChecking?.change(value.isNotEmpty);
                 isHandsUp?.change(false);
@@ -119,11 +179,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     isChecking?.change(false);
                   }
                   );
- //si la pantalla se cierra
+               //si la pantalla se cierra
               },
           
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
+                errorText: emailError,
                 hintText: "Email",
                 prefixIcon: const Icon(Icons.mail),
                 border: OutlineInputBorder(
@@ -136,6 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
             //campo de texto para password
             TextField(
               focusNode: passFocus, // Asignación de FocusNode
+              controller: passCtrl,
               onChanged: (value) {
                 // No es necesario cambiar la lógica de manos aquí, se gestiona con el focusListener.
                     // Si quieres que las manos se levanten solo si hay focus Y estás escribiendo:
@@ -143,6 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               obscureText: _obscurePassword,
               decoration: InputDecoration(
+                errorText: passError,
                 hintText: "Password",
                 prefixIcon: const Icon(Icons.lock),
                 suffixIcon: IconButton(
@@ -179,10 +242,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape:RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 ),
-                onPressed: () { // Ejemplo: llamar a trigSuccess o trigFail al presionar el botón
-                    // trigSuccess?.change(true); 
-                    // trigFail?.change(true);
-},
+                onPressed: (_onLogin), 
                 child: Text("Login",
                 style: TextStyle(
                   color: Colors.white)),
@@ -218,6 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     // Es crucial liberar los recursos de FocusNode y Rive Controller
+    //4.1 limíeza de los controllers
     emailFocus.dispose();
     passFocus.dispose();
     controller?.dispose();
@@ -225,4 +286,3 @@ class _LoginScreenState extends State<LoginScreen> {
     _typingDebounce?.cancel();
   }
 }
-
