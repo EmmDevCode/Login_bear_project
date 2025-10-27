@@ -96,10 +96,10 @@ Once the application is running on your simulator or device, here’s how you ca
 
 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></a>
 
-## 🖌️ class and 👨🏻‍🏫 professor
+## 🖌️ class and 🧑🏻‍🏫 professor
 
 <p align="center">
-  <a href="https://github.com/CodeWhiteWeb/CodeWhiteWeb"><img src="https://readme-typing-svg.herokuapp.com?color=%23000000&center=true&vCenter=true&lines=Graficacion;Rodrigo+Fidel+Gaxiola+Sosa"></a>
+  <a href="https://github.com/CodeWhiteWeb/CodeWhiteWeb"><img src="https://readme-typing-svg.herokuapp.com?color=%23000000&center=true&vCenter=true&lines=Graficacion🧑🏻‍💻;🧑🏻‍🏫Rodrigo+Fidel+Gaxiola+Sosa"></a>
 </p>
 
 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></a>
