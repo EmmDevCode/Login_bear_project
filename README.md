@@ -92,7 +92,7 @@ Once the application is running on your simulator or device, here’s how you ca
 
 ## 🎬 Demo
 
-![App Demo GIF]([LINK_TO_YOUR_DEMO.gif])
+![App Demo GIF](./demo/Demo.gif)
 
 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></a>
 
