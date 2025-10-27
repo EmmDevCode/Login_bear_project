@@ -26,11 +26,9 @@ The State Machine 🧠 is the "brain" behind a Rive animation. It's a visual log
     ```
 * **Dart:** The programming language.
 <p align="center">
-  <a href="https://skillicons.dev">
-    <img src="https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white"/>
-    <img src="https://img.shields.io/badge/Rive-E855A3?style=for-the-badge&logo=rive&logoColor=white"/>
-    <img src="https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white"/>
-  </a>
+    <a href="https://flutter.dev/" target="_blank"><img src="https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white"/></a>
+    <a href="https://rive.app/" target="_blank"><img src="https://img.shields.io/badge/Rive-E855A3?style=for-the-badge&logo=rive&logoColor=white"/></a>
+    <a href="https://dart.dev/" target="_blank"><img src="https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white"/></a>
 </p>
 
 <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></a>
