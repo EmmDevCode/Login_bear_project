@@ -87,6 +87,8 @@ Once the application is running on your simulator or device, here’s how you ca
 * **See Live Validation:** As you type in the password field, watch the password criteria checklist update in real-time.
 * **Trigger Failure:** Enter an invalid email or a password that doesn't meet the criteria, then press the **Login** button. The character will play its "fail" animation (`trigFail`).
 * **Trigger Success:** Enter a valid email and a password that meets all requirements, then press **Login**. The character will celebrate with its "success" animation (`trigSuccess`).
+  
+<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif"></a>
 
 ## 🎬 Demo
 
