@@ -44,7 +44,7 @@ Installation
 
 2.  **Navigate to the project directory**
     ```bash
-    cd practica_1
+    cd Login_bear_project
     ```
 
 3.  **Install dependencies**
